@@ -1,13 +1,15 @@
 buildscript {
     repositories {
         mavenLocal()
+        mavenCentral()
         maven { url "https://repo.grails.org/grails/core" }
         maven { url 'https://repo.gradle.org/gradle/libs-releases' }
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.7"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:4.0.0"
+        classpath "org.grails.plugins:asset-pipeline-gradle:4.0.0"
+        classpath "org.grails.plugins:database-migration:4.2.0"
     }
 }
 
@@ -19,23 +21,35 @@ apply plugin:"idea"
 apply plugin:"war"
 apply plugin:"org.grails.grails-web"
 apply plugin:"com.github.erdi.webdriver-binaries"
-apply plugin:"com.bertramlabs.asset-pipeline"
+apply plugin:"org.grails.asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
 
 repositories {
     mavenLocal()
+    mavenCentral()
     maven { url "https://repo.grails.org/grails/core" }
+    maven { url 'https://repo.gradle.org/gradle/libs-releases' }
 }
 
 configurations {
+    all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'org.liquibase' && details.requested.name == 'liquibase-core') {
+                details.useVersion '4.19.0' // Grails database-migration plugin required
+            }
+        }
+    }
     developmentOnly
     runtimeClasspath {
         extendsFrom developmentOnly
+
+        exclude group: 'com.sun.xml.bind', module: 'jaxb-impl'
     }
 }
 
 dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+    developmentOnly "io.methvin:directory-watcher"
     // compileOnly "io.micronaut:micronaut-inject-groovy"
     console "org.grails:grails-console"
     implementation "org.springframework.boot:spring-boot-starter-logging"
@@ -67,16 +81,16 @@ dependencies {
     implementation "org.hibernate:hibernate-core:5.6.15.Final"
     implementation "org.grails.plugins:events"
     implementation "org.grails.plugins:geb"
-    profile "org.grails.profiles:web"
-    runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
+    implementation "org.grails.plugins:database-migration:4.2.0"
+    // implementation "org.grails.plugins:gsp"
+    profile "org.grails.profiles:web-clean"
+    // runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
     runtimeOnly "com.h2database:h2"
     runtimeOnly "org.apache.tomcat:tomcat-jdbc"
-    runtimeOnly "javax.xml.bind:jaxb-api:2.3.1"
-    runtimeOnly "com.bertramlabs.plugins:asset-pipeline-grails:4.0.0"
-    testImplementation "io.micronaut:micronaut-inject-groovy"
-    testImplementation "org.grails:grails-gorm-testing-support"
+    runtimeOnly "org.grails.plugins:asset-pipeline-grails:4.0.0"
+    // testImplementation "io.micronaut:micronaut-inject-groovy"
+    testImplementation "org.grails:grails-test-support"
     testImplementation "org.mockito:mockito-core"
-    testImplementation "org.grails:grails-web-testing-support"
     testImplementation "org.grails.plugins:geb"
     testImplementation "org.seleniumhq.selenium:selenium-remote-driver:4.0.0"
     testImplementation "org.seleniumhq.selenium:selenium-api:4.0.0"
