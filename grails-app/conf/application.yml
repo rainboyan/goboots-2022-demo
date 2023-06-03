@@ -1,6 +1,6 @@
 ---
 grails:
-    profile: web
+    profile: web-clean
     codegen:
         defaultPackage: org.rainboyan.demo
     gorm:
@@ -24,12 +24,17 @@ spring:
     devtools:
         restart:
             additional-exclude:
-                - '*.gsp'
                 - '**/*.gsp'
-                - '*.gson'
                 - '**/*.gson'
-                - 'logback.groovy'
-                - '*.properties'
+                - 'application.groovy'
+                - 'spring/resources.groovy'
+                - 'spring/resources.xml'
+                - '**/UrlMappings.groovy'
+                - '**/*Controller.groovy'
+                - '**/*Command.groovy'
+                - 'messages*.properties'
+            additional-paths: 'app/controllers'
+
 environments:
     development:
         management:
@@ -115,6 +120,7 @@ environments:
         dataSource:
             dbCreate: create-drop
             url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            formatSql: true
     test:
         dataSource:
             dbCreate: update
