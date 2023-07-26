@@ -49,9 +49,6 @@ configurations {
 
 dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    developmentOnly "io.methvin:directory-watcher"
-    // compileOnly "io.micronaut:micronaut-inject-groovy"
-    console "org.grails:grails-console"
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation "org.springframework.boot:spring-boot-autoconfigure"
@@ -82,13 +79,10 @@ dependencies {
     implementation "org.grails.plugins:events"
     implementation "org.grails.plugins:geb"
     implementation "org.grails.plugins:database-migration:4.2.0"
-    // implementation "org.grails.plugins:gsp"
     profile "org.grails.profiles:web-clean"
-    // runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
     runtimeOnly "com.h2database:h2"
     runtimeOnly "org.apache.tomcat:tomcat-jdbc"
     runtimeOnly "org.grails.plugins:asset-pipeline-grails:4.0.0"
-    // testImplementation "io.micronaut:micronaut-inject-groovy"
     testImplementation "org.grails:grails-test-support"
     testImplementation "org.mockito:mockito-core"
     testImplementation "org.grails.plugins:geb"
