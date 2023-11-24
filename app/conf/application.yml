@@ -1,6 +1,5 @@
 ---
 grails:
-    profile: web-clean
     codegen:
         defaultPackage: org.rainboyan.demo
     gorm:
